@@ -1,17 +1,26 @@
+import type { Note } from "../context/NotesContext";
 import NoteListItem from "./NoteListItem";
 
-export default function NotesList() {
+type NotesListProps = {
+  notes: Note[];
+};
+
+export default function NotesList({ notes }: NotesListProps) {
   return (
     <>
       <div className="notes-container">
         <div className="notebook-pill-title">AARON'S NOTEBOOK</div>
-        <div className="empty-state">
-          <p>You do not have any notes currently.</p>
-        </div>
-        <div className="notes-list">
-          {/* map over the list of notes stored for this notebook */}
-          <NoteListItem />
-        </div>
+        {notes.length < 1 ? (
+          <div className="empty-state">
+            <p>You do not have any notes currently.</p>
+          </div>
+        ) : (
+          <div className="notes-list">
+            {notes.map((note) => {
+              return <NoteListItem key={note.id} note={note} />;
+            })}
+          </div>
+        )}
       </div>
     </>
   );
