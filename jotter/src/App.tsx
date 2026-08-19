@@ -11,19 +11,22 @@ function App() {
       {/* Global Header */}
       {activeView !== "editor" && (
         <header className="app-header" onClick={() => setActiveView("home")}>
-          <h1>JOTTER</h1>
+          <h1 className="brand-logo">JOTTER</h1>
         </header>
       )}
 
       {/* Main Content Area */}
       <main className="main-content">
         {activeView === "home" && (
-          <div className="notebook-cover">
+          <button
+            className="notebook-cover"
+            onClick={() => setActiveView("list")}
+          >
             <div className="cover-title">
               <h2>AARON'S NOTEBOOK</h2>
             </div>
-            <button className="open-btn">OPEN</button>
-          </div>
+            <div className="open-btn">OPEN</div>
+          </button>
         )}
         {activeView === "list" && <NotesList notes={notes} />}
         {activeView === "editor" && activeNote && (

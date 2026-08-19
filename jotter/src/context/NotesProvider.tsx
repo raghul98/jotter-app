@@ -1,22 +1,29 @@
 import {
-  BACKGROUND_OPTIONS,
   NoteContext,
   type Note,
   type NoteContextValue,
   type ViewMode,
 } from "./NotesContext";
 import React from "react";
+import { BACKGROUND_OPTIONS } from "../constants/backgrounds";
 
 export default function NotesProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [notes, setNotes] = React.useState<Note[]>([]);
+  const [notes, setNotes] = React.useState<Note[]>(() => {
+    const cacheNotes = window.localStorage.getItem("notesCache");
+    return cacheNotes ? JSON.parse(cacheNotes) : [];
+  });
   const [activeView, setActiveView] = React.useState<ViewMode>("home");
   const [activeNoteId, setActiveNoteId] = React.useState<string | null>(null);
 
   const activeNote = notes.find((note) => note.id === activeNoteId);
+
+  React.useEffect(() => {
+    window.localStorage.setItem("notesCache", JSON.stringify(notes));
+  }, [notes]);
 
   function openNote(id: string) {
     setActiveView("editor");

@@ -1,17 +1,31 @@
 import { useNotes, type Note } from "../context/NotesContext";
 // import Toolbar from "./Toolbar";
+import { FONT_SIZES } from "../constants/fontSizes";
+import { BACKGROUND_OPTIONS } from "../constants/backgrounds";
 
 type NoteEditorProps = {
   note: Note;
 };
 
 export function NoteEditor({ note }: NoteEditorProps) {
-  const { updateActiveNote } = useNotes();
+  const { updateActiveNote, setActiveView } = useNotes();
+  const isImage = note.bgImage?.colorOrUrl.startsWith("url");
   return (
-    <div className="editor-container">
+    <div
+      className="editor-container"
+      style={{
+        backgroundColor: isImage
+          ? "#ffffff"
+          : note.bgImage?.colorOrUrl || "#ffffff",
+        backgroundImage: isImage ? note.bgImage?.colorOrUrl : "none",
+        backgroundSize: isImage ? "600px auto" : "auto",
+      }}
+    >
       {/* Top Header Navigation */}
       <nav className="editor-nav">
-        <button className="back-btn">Back</button>
+        <button className="back-btn" onClick={() => setActiveView("list")}>
+          Back
+        </button>
       </nav>
 
       {/* Note Content Area */}
@@ -22,9 +36,7 @@ export function NoteEditor({ note }: NoteEditorProps) {
           placeholder="Category / Subtitle"
           value={note.title}
           onChange={(event) => updateActiveNote({ title: event.target.value })}
-        >
-          {note.title}
-        </input>
+        />
         {/* <input
           type="text"
           className="editor-subtitle-input"
@@ -34,20 +46,52 @@ export function NoteEditor({ note }: NoteEditorProps) {
           className="editor-textarea"
           placeholder="Start typing your note..."
           value={note.content}
+          style={{ fontSize: note.fontSize }}
           onChange={(event) =>
             updateActiveNote({ content: event.target.value })
           }
-        >
-          {note.content}
-        </textarea>
+        />
       </div>
       {/* <Toolbar /> */}
 
       <div className="toolbar">
-        <select className="font-size-select">
-          <option value="14pt">{note.fontSize}</option>
+        <select
+          className="font-size-select"
+          value={note.fontSize}
+          onChange={(e) => updateActiveNote({ fontSize: e.target.value })}
+        >
+          {FONT_SIZES.map((size) => {
+            return (
+              <option key={size.value} value={size.value}>
+                {size.label}
+              </option>
+            );
+          })}
         </select>
-        <button className="format-btn bold">B</button>
+        {/* <button className="format-btn bold">B</button> */}
+        <div className="bg-swatches">
+          {BACKGROUND_OPTIONS.map((bg) => {
+            return (
+              <button
+                key={bg.id}
+                type="button"
+                title={bg.name}
+                className={`swatch-btn ${note.bgImage?.id === bg.id ? "active" : ""}`}
+                style={{
+                  backgroundColor: bg.colorOrUrl.startsWith("url")
+                    ? "#ffffff"
+                    : bg.colorOrUrl,
+                  backgroundImage: bg.colorOrUrl.startsWith("url")
+                    ? bg.colorOrUrl
+                    : "none",
+                  backgroundSize: "300px auto",
+                }}
+                aria-label={`Change background to ${bg.name}`}
+                onClick={() => updateActiveNote({ bgImage: bg })}
+              />
+            );
+          })}
+        </div>
         <button className="sticker-picker-btn">
           <img src="/sticker-rocket.png" alt="Stickers" />
         </button>

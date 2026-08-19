@@ -39,15 +39,15 @@ export interface NoteContextValue {
 
 export const NoteContext = React.createContext<NoteContextValue | null>(null);
 
-export const BACKGROUND_OPTIONS: Background[] = [
-  { id: "white", name: "Clean White", colorOrUrl: "#ffffff" },
-  { id: "yellow", name: "Sticky Yellow", colorOrUrl: "#fef08a" },
-  {
-    id: "grid",
-    name: "Grid Paper",
-    colorOrUrl: 'url("/assets/grid-paper.png")',
-  },
-];
+// export const BACKGROUND_OPTIONS: Background[] = [
+//   { id: "white", name: "Clean White", colorOrUrl: "#ffffff" },
+//   { id: "yellow", name: "Sticky Yellow", colorOrUrl: "#fef08a" },
+//   {
+//     id: "grid",
+//     name: "Grid Paper",
+//     colorOrUrl: 'url("/assets/grid-paper.png")',
+//   },
+// ];
 
 export function useNotes() {
   const context = React.useContext(NoteContext);

@@ -12,7 +12,7 @@ export default function NoteListItem({
   return (
     <article className="note-card-item" onClick={() => openNote(id)}>
       <div className="note-card-date">
-        <span>{date.slice(0, 2)}</span>
+        <span>{date.slice(0, 3)}</span>
         <span>{date.slice(3, 6)}</span>
       </div>
       <div className="note-card-content">
@@ -22,7 +22,10 @@ export default function NoteListItem({
       <button
         className="delete-btn"
         aria-label="Delete note"
-        onClick={() => deleteNote(id)}
+        onClick={(event) => {
+          event.stopPropagation();
+          deleteNote(id);
+        }}
       >
         ✕
       </button>
